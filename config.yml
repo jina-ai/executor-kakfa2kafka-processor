@@ -1,0 +1,13 @@
+jtype: KafkaToKafka
+metas:
+  py_modules:
+  - kafka2kafka.py
+  name: KafkaToKafka
+  description: KafkaToKafka executor consumes documents/messages from a topic. Each document
+    is converted to a docarray Document adds a random embedding. The docarray Document
+    is then written/published to another Kafka topic as json.
+  url: http://github.com:jina-ai/executor-kakfa2kafka-processor
+  keywords:
+  - kafka
+  - enrichment
+  - message-processing

@@ -23,7 +23,7 @@ To remove all data in Kafka, run:
 python delete_topics.py
 ```
 
-## Kafka2Kafka Executor
+## KafkaToKafka Executor
 
 Simpler consumer and producer executor that consumes raw messages/documents from the CONSUMER_TOPIC and write the processed Docarray to the PRODUCER_TOPIC. A BATCH_SIZE environment is also provided to configure the publish batch size. On a `/` post request, the batch raw documents are converted to a Document and a random embedding is added to the document. A Docarray is created from the batch which is then published as json to the PRODUCER_TOPIC.
 

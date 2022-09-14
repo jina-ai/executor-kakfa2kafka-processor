@@ -8,10 +8,10 @@ from init_kafka_topics import (
     PUBLISH_TOPIC,
     print_messages_in_topic,
 )
-from kafka2kafka import Kafka2Kafka
+from kafka2kafka import KafkaToKafka
 
 f = Flow().add(
-    uses=Kafka2Kafka,
+    uses=KafkaToKafka,
     env={
         'BOOTSTRAP_SERVERS': BOOTSTRAP_SERVERS,
         'CONSUMER_TOPIC': CONSUME_TOPIC,
