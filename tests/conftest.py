@@ -42,12 +42,12 @@ def docker_compose(bootstrap_servers, consumer_topic, producer_topic, num_messag
     os.system(
         f"docker-compose -f {compose_yml} --project-directory . up  --build -d --remove-orphans"
     )
-    admin_client = KafkaAdminClient(bootstrap_server=bootstrap_servers)
     is_ready = False
     required_topics = [consumer_topic, producer_topic]
 
     while not is_ready:
         try:
+            admin_client = KafkaAdminClient(bootstrap_servers=bootstrap_servers)
             existing_topics = admin_client.list_topics()
             for topic in required_topics:
                 if topic not in existing_topics:
@@ -55,26 +55,25 @@ def docker_compose(bootstrap_servers, consumer_topic, producer_topic, num_messag
                         NewTopic(name=topic, num_partitions=1, replication_factor=1)
                     ]
                     admin_client.create_topics(new_topics=new_topics)
+            producer = KafkaProducer(
+                bootstrap_servers=bootstrap_servers,
+                value_serializer=lambda m: json.dumps(m).encode('utf-8'),
+            )
 
+            for index in range(num_messages):
+                json_doc = {
+                    'key': index,
+                    'text': ''.join(
+                        random.choices(string.ascii_uppercase + string.digits, k=20)
+                    ),
+                }
+                producer.send(topic=consumer_topic, key=bytes(index), value=json_doc)
+
+            producer.flush(timeout=2)
             is_ready = True
         except:
             time.sleep(0.5)
 
-    producer = KafkaProducer(
-        bootstrap_servers=bootstrap_servers,
-        value_serializer=lambda m: json.dumps(m).encode('utf-8'),
-    )
-
-    for index in range(num_messages):
-        json_doc = {
-            'key': index,
-            'text': ''.join(
-                random.choices(string.ascii_uppercase + string.digits, k=20)
-            ),
-        }
-        producer.send(topic=consumer_topic, key=bytes(index), value=json_doc)
-
-    producer.flush(timeout=1)
     yield
     os.system(
         f"docker-compose -f {compose_yml} --project-directory . down --remove-orphans"
