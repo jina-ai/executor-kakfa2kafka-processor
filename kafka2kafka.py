@@ -9,7 +9,7 @@ from jina.logging.logger import JinaLogger
 from kafka import KafkaConsumer, KafkaProducer
 
 
-class Kafka2Kafka(Executor):
+class KafkaToKafka(Executor):
     '''Publishes the input docarray into the specified topic. Each Document is published as a single Kafka message.'''
 
     def __init__(
