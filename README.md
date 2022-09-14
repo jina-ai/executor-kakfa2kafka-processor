@@ -9,7 +9,7 @@ Install requirements using:
 pip install -r requirements.txt
 ```
 
-A sample Kafka app is provided in the [docker-compose.yml](docker-compose.yml). Local Kafka application can be started by running `docker-compose up -d`.
+A sample Kafka app is provided in the [tests/docker-compose.yml](tests/docker-compose.yml). Local Kafka application can be started by running `docker-compose -f tests/docker-compose up -d`.
 
 For creating the topics and sample data for the demo, run:
 ```shell

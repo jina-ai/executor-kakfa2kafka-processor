@@ -11,4 +11,9 @@ WORKDIR /workspace
 RUN pip install --default-timeout=1000 --compile --no-cache-dir \
      -r requirements.txt
 
+ENV BOOTSTRAP_SERVERS="localhost:9092"
+ENV CONSUMER_TOPIC="input_raw_docs"
+ENV PUBLISH_TOPIC="enriched_docs"
+ENV BATCH_SIZE="5"
+
 ENTRYPOINT ["jina", "executor", "--uses", "config.yml"]
