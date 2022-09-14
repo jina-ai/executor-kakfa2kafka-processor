@@ -23,6 +23,13 @@ class KafkaToKafka(Executor):
         super().__init__(metas, requests, runtime_args, workspace, **kwargs)
         self._consumer_topic = os.environ['CONSUMER_TOPIC']
         self._producer_topic = os.environ['PUBLISH_TOPIC']
+        self._batch_size = int(os.environ['BATCH_SIZE'])
+        self.logger = JinaLogger(self.metas.name)
+        self._consumer = None
+        self._producer = None
+        self.__init_consumer_producer = True
+
+    def __lazy_init(self):
         self._consumer = KafkaConsumer(
             self._consumer_topic,
             group_id='kafka2docarray',
@@ -34,11 +41,13 @@ class KafkaToKafka(Executor):
             bootstrap_servers=os.environ['BOOTSTRAP_SERVERS'],
             value_serializer=lambda m: json.dumps(m).encode('utf-8'),
         )
-        self._batch_size = int(os.environ['BATCH_SIZE'])
-        self.logger = JinaLogger(self.metas.name)
+        self.__init_consumer_producer = False
 
     @requests
     def enrich(self, **kwargs):
+        if self.__init_consumer_producer:
+            self.__lazy_init()
+
         topic_partitions = self._consumer.poll(
             timeout_ms=0, max_records=self._batch_size, update_offsets=True
         )
