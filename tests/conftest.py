@@ -29,7 +29,7 @@ def producer_topic():
 
 @pytest.fixture(scope='module')
 def num_messages():
-    return 50
+    return 25
 
 
 @pytest.fixture(scope='module')
