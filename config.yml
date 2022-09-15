@@ -11,3 +11,8 @@ metas:
   - kafka
   - enrichment
   - message-processing
+env:
+  BOOTSTRAP_SERVERS: 'localhost:9092'
+  CONSUMER_TOPIC: 'input_raw_docs'
+  PUBLISH_TOPIC: 'enriched_docs'
+  BATCH_SIZE: '5'
