@@ -8,6 +8,7 @@ from kafka import KafkaConsumer
 from kafka2kafka import KafkaToKafka
 
 
+@pytest.mark.flaky(reruns=3)
 def test_flow(
     docker_compose,
     bootstrap_servers,
@@ -43,7 +44,7 @@ def test_flow(
     )
 
     topic_partitions = consumer.poll(
-        timeout_ms=1000, max_records=num_messages, update_offsets=True
+        timeout_ms=2000, max_records=num_messages, update_offsets=True
     )
     consumer_records = []  # flatten all consumer records
     for crs in topic_partitions.values():
